@@ -22,22 +22,31 @@ class cAuth extends CI_Controller
             $username = $this->input->post('username');
             $password = $this->input->post('password');
 
-            $auth = $this->mAuth->Auth($username, $password);
+            $auth = $this->mAuth->Auth($username);
+            
             if ($auth) {
 
-                $array = array(
-                    'id' => $auth->id_user
-                );
+                // verified password on this section
+                if(password_verify($password, $auth->password)){
+                    // login success
+                     $array = array(
+                        'id' => $auth->id_user
+                    );
 
-                $this->session->set_userdata($array);
+                    $this->session->set_userdata($array);
 
-                if ($auth->level_user == '1') {
-                    redirect('Admin/cDashboard');
+                    if ($auth->level_user == '1') {
+                        redirect('Admin/cDashboard');
+                    } else {
+                        redirect('Timti/cDashboard');
+                    }
                 } else {
-                    redirect('Timti/cDashboard');
+                    $this->session->set_flashdata('error', 'Password Anda Salah');
+                    redirect('cAuth');
                 }
+                
             } else {
-                $this->session->set_flashdata('error', 'Username dan Password Salah!!!');
+                $this->session->set_flashdata('error', 'Username Anda Salah');
                 redirect('cAuth');
             }
         }
