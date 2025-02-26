@@ -137,12 +137,14 @@ class cKelolaData extends CI_Controller
     }
     public function createuser()
     {
+        // in here, we try hash password using bcrypt algoritm
+        // add password_hash($this->input->post('password'), PASSWORD_BCRYPT)
         $data = array(
             'nama' => $this->input->post('nama'),
             'no_badge' => $this->input->post('no_badge'),
             'tlp_ext' => $this->input->post('tlp_ext'),
             'username' => $this->input->post('username'),
-            'password' => $this->input->post('password'),
+            'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
             'level_user' => $this->input->post('level'),
         );
         $this->mKelolaData->insert_user($data);
@@ -156,7 +158,7 @@ class cKelolaData extends CI_Controller
             'no_badge' => $this->input->post('no_badge'),
             'tlp_ext' => $this->input->post('tlp_ext'),
             'username' => $this->input->post('username'),
-            'password' => $this->input->post('password'),
+            'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
             'level_user' => $this->input->post('level'),
         );
         $this->mKelolaData->updateuser($id, $data);
